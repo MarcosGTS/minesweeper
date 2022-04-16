@@ -68,20 +68,27 @@ class Minesweeper {
         return [... this.field];
     }
 
-    countBombs(x, y, r = 1) {
+    countBombs(x, y, radius = 1) {
         let { field } = this;
         let adjancents = [];
+        let start = Math.max(x - radius, 0);  
+        let len = 2 * radius + 1;
         
-        for (let  i = (y - r); i <= (y + r); i++) {
-            let line = field[i].splice(x - 1, 3);
-            adjancents = adjancents.concat(line);
+        for (let  i = -radius; i <=  radius; i++) {
+            let line = field[y + i]
+            
+            //check existahce
+            if (!line) continue;
+    
+            let lineSection = line.splice(start, len);
+            adjancents = adjancents.concat(lineSection);
         }
         
-        console.log(adjancents);
+        return adjancents.filter(el => el.isBomb()).length;
     }
 }
 
 const mine = new Minesweeper(5,5);
 mine.generateBombs(3);
-mine.countBombs(1,1);
+console.log(mine.countBombs(0,0));
 
