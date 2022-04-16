@@ -6,6 +6,10 @@ class Cell {
     isBomb () {
         return this.value < 0;
     }
+
+    setValue(value) {
+        this.value = value;
+    }
 }
 
 class Minesweeper {
@@ -35,19 +39,20 @@ class Minesweeper {
             num--;
 
         } while (num > 0)
-
     }
 
     fillCells () {
         /*
             if not a bomb change a the value of a cell
         */
+        let { width, height} = this;
 
-        let { x, y } = this;
-
-        for (let i = 0; i < y; i++) {
-            for (let j = 0; j < x; j++) {
-
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                let crr = this.field[y][x];
+    
+                let bombs = this.countBombs(x, y);
+                this.field[y][x] = new Cell(bombs);
             }
         }
     }
@@ -69,13 +74,13 @@ class Minesweeper {
     }
 
     countBombs(x, y, radius = 1) {
-        let { field } = this;
+        let test  = this.field.map(el => [...el])
         let adjancents = [];
         let start = Math.max(x - radius, 0);  
         let len = 2 * radius + 1;
         
         for (let  i = -radius; i <=  radius; i++) {
-            let line = field[y + i]
+            let line = test[y + i]
             
             //check existahce
             if (!line) continue;
@@ -84,11 +89,14 @@ class Minesweeper {
             adjancents = adjancents.concat(lineSection);
         }
         
-        return adjancents.filter(el => el.isBomb()).length;
+        return adjancents
+        .filter(el => el)
+        .filter(el => el.isBomb()).length;
     }
 }
 
 const mine = new Minesweeper(5,5);
 mine.generateBombs(3);
-console.log(mine.countBombs(0,0));
+mine.fillCells();
+console.log(mine.getMine());
 
