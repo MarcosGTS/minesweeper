@@ -1,5 +1,7 @@
 const MINE_SIZE = 10;
-const DIFICULT = 0.2 * (MINE_SIZE**2);
+const DIFICULT = 0.1 * (MINE_SIZE**2);
+
+let GRID = document.querySelector(".grid");
 
 class Cell {
     constructor (value) {
@@ -105,24 +107,52 @@ class Minesweeper {
 
 
 //Renderer
+function showGameover() {
+    for (let cellEl of GRID.childNodes) {
+        cellEl.classList.remove("hide");
+    }
+}
+
+function spreadNone(node) {
+    if (!node) return;
+    if (!node.classList.contains("hide")) return;
+
+    let cellsList = [...GRID.children];
+    let index = cellsList.indexOf(node)
+    let [x, y] = [index % MINE_SIZE, parseInt(index/MINE_SIZE)]
+    
+    node.classList.remove("hide");
+    
+    if (node.innerText != "") return; 
+    
+    if (x + 1 < MINE_SIZE) spreadNone(cellsList[index + 1]);
+    if (x - 1 >= 0) spreadNone(cellsList[index - 1]);
+    
+    spreadNone(cellsList[index - MINE_SIZE]);
+    spreadNone(cellsList[index + MINE_SIZE]);
+}
 
 function renderMine(mineField) {
-    let grid = document.querySelector(".grid");
     
     for (let line of mineField) {
         for (let cell of line) {
     
-            let cellEl= document.createElement("div");
+            let cellEl = document.createElement("div");
             
             cellEl.classList.add("cell"); 
+            cellEl.classList.add("hide");
 
-            if (cell.isBomb()) 
+            if (cell.isBomb()) {
                 cellEl.classList.add("bomb");
-
+                cellEl.addEventListener("click", showGameover)
+            }
+                
             if (cell.getValue() > 0) 
                 cellEl.innerText = cell.getValue();
 
-            grid.appendChild(cellEl);
+            cellEl.addEventListener("click", () => spreadNone(cellEl))
+
+            GRID.appendChild(cellEl);
         }
     }
 }
