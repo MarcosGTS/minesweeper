@@ -1,5 +1,5 @@
 const MINE_SIZE = 10;
-const DIFICULT = 0.3 * (MINE_SIZE**2);
+const DIFICULT = 0.2 * (MINE_SIZE**2);
 
 class Cell {
     constructor (value) {
@@ -116,8 +116,14 @@ function renderMine(mineField) {
     
             let cellEl= document.createElement("div");
             
-            cellEl.classList.add("cell");
-            
+            cellEl.classList.add("cell"); 
+
+            if (cell.isBomb()) 
+                cellEl.classList.add("bomb");
+
+            if (cell.getValue() > 0) 
+                cellEl.innerText = cell.getValue();
+
             grid.appendChild(cellEl);
         }
     }
