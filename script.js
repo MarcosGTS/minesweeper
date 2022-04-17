@@ -1,3 +1,6 @@
+const MINE_SIZE = 10;
+const DIFICULT = 0.3 * (MINE_SIZE**2);
+
 class Cell {
     constructor (value) {
         this.value = value;
@@ -9,6 +12,10 @@ class Cell {
 
     setValue(value) {
         this.value = value;
+    }
+
+    getValue() {
+        return this.value;
     }
 }
 
@@ -50,7 +57,10 @@ class Minesweeper {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let crr = this.field[y][x];
-    
+
+                //check if is a bomb
+                if (crr && crr.isBomb()) continue;
+
                 let bombs = this.countBombs(x, y);
                 this.field[y][x] = new Cell(bombs);
             }
@@ -95,8 +105,25 @@ class Minesweeper {
     }
 }
 
-const mine = new Minesweeper(5,5);
-mine.generateBombs(3);
-mine.fillCells();
-console.log(mine.getMine());
 
+//Renderer
+
+function renderMine(mineField) {
+    let grid = document.querySelector(".grid");
+    
+    for (let line of mineField) {
+        for (let cell of line) {
+    
+            let cellEl= document.createElement("div");
+            
+            cellEl.classList.add("cell");
+            
+            grid.appendChild(cellEl);
+        }
+    }
+}
+const mine = new Minesweeper(MINE_SIZE, MINE_SIZE);
+mine.generateBombs(DIFICULT);
+mine.fillCells()
+renderMine(mine.getMine())
+console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
