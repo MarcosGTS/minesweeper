@@ -61,7 +61,7 @@ class Minesweeper {
                 //check if is a bomb
                 if (crr && crr.isBomb()) continue;
 
-                let bombs = this.countBombs(x, y);
+                let bombs = this.countBombs(x, y)
                 this.field[y][x] = new Cell(bombs);
             }
         }
@@ -84,21 +84,19 @@ class Minesweeper {
     }
 
     countBombs(x, y, radius = 1) {
-        let test  = this.field.map(el => [...el])
         let adjancents = [];
         let start = Math.max(x - radius, 0);  
-        let len = 2 * radius + 1;
+        let len = x + radius + 1;
         
         for (let  i = -radius; i <=  radius; i++) {
-            let line = test[y + i]
+            let line = this.field[y + i]
             
-            //check existahce
             if (!line) continue;
     
-            let lineSection = line.splice(start, len);
+            let lineSection = line.slice(start, len);
             adjancents = adjancents.concat(lineSection);
         }
-        
+
         return adjancents
         .filter(el => el)
         .filter(el => el.isBomb()).length;
@@ -128,8 +126,11 @@ function renderMine(mineField) {
         }
     }
 }
+
 const mine = new Minesweeper(MINE_SIZE, MINE_SIZE);
 mine.generateBombs(DIFICULT);
 mine.fillCells()
 renderMine(mine.getMine())
-console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
+
+//console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
+
