@@ -1,9 +1,12 @@
 const DIFFICULTY = 20;
 const MINE_SIZE = 10;
-const DIFICULT = (DIFFICULTY / 100) * (MINE_SIZE ** 2);
+const NUMBER_OF_BOMBS = parseInt((DIFFICULTY / 100) * (MINE_SIZE ** 2));
 
 let GRID = document.querySelector(".grid");
-let startBtn = document.querySelector("#start");
+let MENU = document.querySelector(".menu");
+
+let startBtn = document.querySelector(".start");
+
 startBtn.addEventListener("click", startGame);
 
 class Cell {
@@ -40,17 +43,16 @@ class Minesweeper {
         let { width, height } = this;
         let { field } = this;
 
-        do {
+        for (let bombs = 0; bombs < num;) {
+
             let [x, y] = this.getRandomPosition(width, height);
             let cell = field[y][x];
             
             if (cell) continue;
-            
-            // Creating a bomb
+   
             field[y][x] = new Cell(-1);
-            num--;
-
-        } while (num > 0)
+            bombs++
+        }
     }
 
     fillCells () {
@@ -147,6 +149,15 @@ function addFlag(e) {
     this.classList.toggle("flag");
 }
 
+function checkVictory() {
+    let discovered = [...GRID.children]
+        .filter(el => el.classList.contains("hide"))
+
+    if (discovered.length == NUMBER_OF_BOMBS) {
+        MENU.classList.remove("invisible");
+    }
+}
+
 function renderMine(mineField) {
     GRID.innerHTML = "";
     for (let line of mineField) {
@@ -169,18 +180,21 @@ function renderMine(mineField) {
 
             cellEl.addEventListener("click", () => spreadNone(cellEl));
 
+            cellEl.addEventListener("click", checkVictory)
             GRID.appendChild(cellEl);
         }
     }
 }
 
 function startGame() {
+    MENU.classList.add("invisible");
+
     const mine = new Minesweeper(MINE_SIZE, MINE_SIZE);
-    mine.generateBombs(DIFICULT);
+    mine.generateBombs(NUMBER_OF_BOMBS);
     mine.fillCells();
     renderMine(mine.getMine());
 }
 
-
+startGame();
 //console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
 
