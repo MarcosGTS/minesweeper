@@ -3,6 +3,8 @@ const MINE_SIZE = 10;
 const DIFICULT = (DIFFICULTY / 100) * (MINE_SIZE ** 2);
 
 let GRID = document.querySelector(".grid");
+let startBtn = document.querySelector("#start");
+startBtn.addEventListener("click", startGame);
 
 class Cell {
     constructor (value) {
@@ -52,9 +54,8 @@ class Minesweeper {
     }
 
     fillCells () {
-        /*
-            if not a bomb change a the value of a cell
-        */
+        /* If not a bomb change a the value of a cell */
+
         let { width, height} = this;
 
         for (let y = 0; y < height; y++) {
@@ -106,7 +107,6 @@ class Minesweeper {
     }
 }
 
-
 //Renderer
 function showGameover() {
     for (let cellEl of GRID.childNodes) {
@@ -119,8 +119,8 @@ function spreadNone(node) {
     if (!node.classList.contains("hide")) return;
 
     let cellsList = [...GRID.children];
-    let index = cellsList.indexOf(node)
-    let [x, y] = [index % MINE_SIZE, parseInt(index/MINE_SIZE)]
+    let index = cellsList.indexOf(node);
+    let [x, y] = [index % MINE_SIZE, parseInt(index/MINE_SIZE)];
     
     node.classList.remove("hide");
     
@@ -148,7 +148,7 @@ function addFlag(e) {
 }
 
 function renderMine(mineField) {
-    
+    GRID.innerHTML = "";
     for (let line of mineField) {
         for (let cell of line) {
     
@@ -161,23 +161,26 @@ function renderMine(mineField) {
 
             if (cell.isBomb()) {
                 cellEl.classList.add("bomb");
-                cellEl.addEventListener("click", showGameover)
+                cellEl.addEventListener("click", showGameover);
             }
                 
             if (cell.getValue() > 0) 
                 cellEl.innerText = cell.getValue();
 
-            cellEl.addEventListener("click", () => spreadNone(cellEl))
+            cellEl.addEventListener("click", () => spreadNone(cellEl));
 
             GRID.appendChild(cellEl);
         }
     }
 }
 
-const mine = new Minesweeper(MINE_SIZE, MINE_SIZE);
-mine.generateBombs(DIFICULT);
-mine.fillCells()
-renderMine(mine.getMine())
+function startGame() {
+    const mine = new Minesweeper(MINE_SIZE, MINE_SIZE);
+    mine.generateBombs(DIFICULT);
+    mine.fillCells();
+    renderMine(mine.getMine());
+}
+
 
 //console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
 
