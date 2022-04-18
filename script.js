@@ -1,5 +1,6 @@
+const DIFFICULTY = 20;
 const MINE_SIZE = 10;
-const DIFICULT = 0.1 * (MINE_SIZE**2);
+const DIFICULT = (DIFFICULTY / 100) * (MINE_SIZE ** 2);
 
 let GRID = document.querySelector(".grid");
 
@@ -125,11 +126,25 @@ function spreadNone(node) {
     
     if (node.innerText != "") return; 
     
-    if (x + 1 < MINE_SIZE) spreadNone(cellsList[index + 1]);
-    if (x - 1 >= 0) spreadNone(cellsList[index - 1]);
+    if (x + 1 < MINE_SIZE) {
+        spreadNone(cellsList[index + 1]);
+        spreadNone(cellsList[index - MINE_SIZE + 1]);
+        spreadNone(cellsList[index + MINE_SIZE + 1]);
+    }
+
+    if (x - 1 >= 0) {
+        spreadNone(cellsList[index - 1]);
+        spreadNone(cellsList[index - MINE_SIZE - 1]);
+        spreadNone(cellsList[index + MINE_SIZE - 1]);
+    }
     
-    spreadNone(cellsList[index - MINE_SIZE]);
     spreadNone(cellsList[index + MINE_SIZE]);
+    spreadNone(cellsList[index + MINE_SIZE])
+}
+
+function addFlag(e) {
+    e.preventDefault();
+    this.classList.toggle("flag");
 }
 
 function renderMine(mineField) {
@@ -141,6 +156,8 @@ function renderMine(mineField) {
             
             cellEl.classList.add("cell"); 
             cellEl.classList.add("hide");
+            
+            cellEl.addEventListener("contextmenu", addFlag);
 
             if (cell.isBomb()) {
                 cellEl.classList.add("bomb");
