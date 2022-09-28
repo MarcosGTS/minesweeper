@@ -140,8 +140,8 @@ function spreadNone(node) {
         spreadNone(cellsList[index + MINE_SIZE - 1]);
     }
     
+    spreadNone(cellsList[index - MINE_SIZE]);
     spreadNone(cellsList[index + MINE_SIZE]);
-    spreadNone(cellsList[index + MINE_SIZE])
 }
 
 function addFlag(e) {
