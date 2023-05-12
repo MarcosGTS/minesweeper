@@ -9,6 +9,18 @@ let startBtn = document.querySelector(".start");
 
 startBtn.addEventListener("click", startGame);
 
+// update copyright to current year
+let yearTags = document.querySelectorAll(".current-year");
+
+function setCurrentYear(tag) {
+    const currentDate = new Date();
+
+    tag.innerText = currentDate.getFullYear();
+}
+
+yearTags.forEach((tag) => setCurrentYear(tag));
+
+
 class Cell {
     constructor (value) {
         this.value = value;
@@ -197,4 +209,3 @@ function startGame() {
 
 startGame();
 //console.log(mine.getMine().map(el => el.map(cell => cell.getValue())))
-
