@@ -13,14 +13,14 @@ body {
     align-items: center;
 }
 
+main {
+   margin: auto 0;
+   position: relative; 
+}
+
 .menu {
     position: absolute;
-    height: 100vh;
-    width: 100vw;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
     pointer-events: none;
 }
 
@@ -90,13 +90,15 @@ body {
     opacity: 0;
 }
 
-footer {
-    margin: auto 0;
+footer, footer a {
+    margin: auto 0 0;
     display: flex;
     justify-content: center;
     align-items: center;
 
+    color: black;
     font-size: 16px;
+    text-decoration: none;
 }
 
 .github img {

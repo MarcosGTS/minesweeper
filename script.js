@@ -15,7 +15,7 @@ let yearTags = document.querySelectorAll(".current-year");
 function setCurrentYear(tag) {
     const currentDate = new Date();
 
-    tag.innerText = currentDate.getFullYear();
+    tag.innerText = `Copyright © ${currentDate.getFullYear()} MarcosGTS`;
 }
 
 yearTags.forEach((tag) => setCurrentYear(tag));
